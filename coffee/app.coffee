@@ -1,1 +1,1 @@
-window.LCM = Object.create(null)
+window.LCM = angular.module("LCM", [])
