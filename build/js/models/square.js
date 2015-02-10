@@ -11,7 +11,12 @@
       primes[key] = Math.round(Math.random() * 4);
     }
     return {
-      primes: primes
+      primes: primes,
+      product: function() {
+        return Object.keys(primes).reduce((function(accum, current) {
+          return Math.pow(parseInt(current), primes[current]) * accum;
+        }), 1);
+      }
     };
   };
 
