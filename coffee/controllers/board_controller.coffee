@@ -1,0 +1,1 @@
+LCM.controller 'BoardController', ($scope) ->

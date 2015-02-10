@@ -6,5 +6,6 @@ html
     script(src="/js/app.js")
     script(src="/js/models/square.js")
     script(src="/js/models/board.js")
-  body
-
+    script(src="/js/controllers/board_controller.js")
+  body(ng-app="LCM")
+    section(id="game" ng-controller="BoardController")

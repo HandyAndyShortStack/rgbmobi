@@ -1,1 +1,1 @@
-window.LCM = angular.module("LCM", [])
+window.LCM = angular.module 'LCM', []
