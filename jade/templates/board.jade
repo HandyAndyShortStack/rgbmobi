@@ -1,4 +1,14 @@
 div.row
-  div.small-12.small-centered.lcm {{ board.lcm() }}
-    div.factorization(ng-repeat="(k, v) in board.factorization")
-      span {{board.factorization}}
+  div.small-12.columns.small-centered.lcm {{ board.lcm().value }}
+    div.factorization
+      span(ng-repeat="(k, v) in board.lcm().factorization") {{ k }}
+        sup {{ v }}
+        | 
+
+div.row
+  div.small-4.columns.square(ng-repeat="square in board.squares")
+    | {{ square.product() }}
+    div.factorization
+      span(ng-repeat="(k, v) in square.primes") {{ k }}
+        sup {{ v }}
+        | 
