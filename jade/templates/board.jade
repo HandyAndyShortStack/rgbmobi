@@ -1,4 +1,4 @@
 div.row
   div.small-12.small-centered.lcm {{ board.lcm() }}
-
-div.row.
+    div.factorization(ng-repeat="(k, v) in board.factorization")
+      span {{board.factorization}}

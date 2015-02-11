@@ -2,7 +2,12 @@
 (function() {
   LCM.controller('BoardController', function($scope) {
     var board;
-    return board = $scope.board = LCM.board();
+    board = $scope.board = LCM.board();
+    return $scope.o = {
+      1: 1,
+      2: 2,
+      3: 3
+    };
   });
 
 }).call(this);

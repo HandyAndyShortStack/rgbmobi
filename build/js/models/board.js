@@ -15,9 +15,10 @@
         }
         return _results;
       })(),
+      factorization: {},
       lcm: function() {
         var exponent, prime, primes, _i, _len, _ref, _ref1, _square;
-        primes = Object.create(null);
+        primes = {};
         _ref = this.squares;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           _square = _ref[_i];
@@ -29,6 +30,10 @@
             }
           }
         }
+        if (!_.isEqual(primes, this.factorization)) {
+          this.factorization = primes;
+        }
+        window.thing = this;
         return Object.keys(primes).reduce((function(accum, current) {
           return Math.pow(parseInt(current), primes[current]) * accum;
         }), 1);
