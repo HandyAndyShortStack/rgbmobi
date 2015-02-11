@@ -6,7 +6,7 @@ div.row
         | 
 
 div.row
-  div.small-4.columns.square(ng-repeat="square in board.squares")
+  div.small-4.columns.square(ng-repeat="square in board.squares track by $index")
     | {{ square.product() }}
     div.factorization
       span(ng-repeat="(k, v) in square.primes") {{ k }}
