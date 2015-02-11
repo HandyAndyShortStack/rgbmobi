@@ -2,5 +2,13 @@ section#game .lcm {
   text-align: center;
 }
 section#game .square {
+  width: 100%;
+  padding-bottom: 100%;
+}
+section#game .square .square-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   text-align: center;
+  padding-right: 30px;
 }
