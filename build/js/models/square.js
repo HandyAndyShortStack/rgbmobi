@@ -8,7 +8,7 @@
       5: 0
     };
     for (key in primes) {
-      primes[key] = Math.round(Math.random() * 4);
+      primes[key] = Math.round(Math.random() * 5);
     }
     return {
       primes: primes,
