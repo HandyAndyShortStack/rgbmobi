@@ -101,6 +101,29 @@
           }
           return _results;
         }).call(this);
+      },
+      shift: function(direction) {
+        var newIndicies;
+        if (direction === 'right') {
+          newIndicies = [2, 0, 1, 5, 3, 4, 8, 6, 7];
+        } else if (direction === 'down') {
+          newIndicies = [6, 7, 8, 0, 1, 2, 3, 4, 5];
+        } else if (direction === 'left') {
+          newIndicies = [1, 2, 0, 4, 5, 3, 7, 8, 6];
+        } else if (direction === 'up') {
+          newIndicies = [3, 4, 5, 6, 7, 8, 0, 1, 2];
+        } else {
+          return;
+        }
+        return this.squares = (function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = newIndicies.length; _i < _len; _i++) {
+            i = newIndicies[_i];
+            _results.push(this.squares[i]);
+          }
+          return _results;
+        }).call(this);
       }
     };
   };

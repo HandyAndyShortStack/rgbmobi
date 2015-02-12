@@ -46,3 +46,15 @@ LCM.board = ->
       return
     @squares = (@squares[i] for i in newIndicies)
 
+  shift: (direction) ->
+    if direction is 'right'
+      newIndicies = [2, 0, 1, 5, 3, 4, 8, 6, 7]
+    else if direction is 'down'
+      newIndicies = [6, 7, 8, 0, 1, 2, 3, 4, 5]
+    else if direction is 'left'
+      newIndicies = [1, 2, 0, 4, 5, 3, 7, 8, 6]
+    else if direction is 'up'
+      newIndicies = [3, 4, 5, 6, 7, 8, 0, 1, 2]
+    else
+      return
+    @squares = (@squares[i] for i in newIndicies)
