@@ -10,6 +10,7 @@ LCM.board = ->
     [0, 4, 8]
     [6, 4, 2]
   ]
+
   lcm: ->
     primes = {}
     for square in @squares
@@ -20,6 +21,7 @@ LCM.board = ->
       parseInt(current) ** primes[current] * accum
     ), 1
     {value: value, factorization: primes}
+
   cancels: ->
     result = []
     allPrimes = (parseInt(key) for key in Object.keys(@squares[0].primes))
@@ -34,4 +36,13 @@ LCM.board = ->
       if Object.keys(report.primes).length > 0
         result.push(report)
     result
-        
+  
+  rotate: (direction) ->
+    if direction is 'cw'
+      newIndicies = [3, 0, 1, 6, 4, 2, 7, 8, 5]
+    else if direction is 'ccw'
+      newIndicies = [1, 2, 5, 0, 4, 8, 3, 6, 7]
+    else
+      return
+    @squares = (@squares[i] for i in newIndicies)
+

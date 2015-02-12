@@ -82,6 +82,25 @@
           }
         }
         return result;
+      },
+      rotate: function(direction) {
+        var newIndicies;
+        if (direction === 'cw') {
+          newIndicies = [3, 0, 1, 6, 4, 2, 7, 8, 5];
+        } else if (direction === 'ccw') {
+          newIndicies = [1, 2, 5, 0, 4, 8, 3, 6, 7];
+        } else {
+          return;
+        }
+        return this.squares = (function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = newIndicies.length; _i < _len; _i++) {
+            i = newIndicies[_i];
+            _results.push(this.squares[i]);
+          }
+          return _results;
+        }).call(this);
       }
     };
   };
