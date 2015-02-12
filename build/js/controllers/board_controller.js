@@ -3,7 +3,7 @@
   var easeInOutQuad;
 
   LCM.controller('BoardController', function($scope) {
-    var animationInProgress, applyCancellations, board;
+    var animationInProgress, applyCancellations, board, swipe;
     animationInProgress = false;
     board = $scope.board = LCM.board();
     $scope.o = {
@@ -31,7 +31,7 @@
       return _results;
     };
     applyCancellations();
-    return window.rotate = $scope.rotote = function(direction) {
+    window.rotate = $scope.rotote = function(direction) {
       var change, duration, initialValue, squareDirections, startTime, step, updateSquarePositions;
       if (direction === 'cw') {
         squareDirections = {
@@ -104,6 +104,56 @@
         return _results;
       };
       return requestAnimationFrame(step);
+    };
+    $(function() {
+      return Hammer($('.board')[0]).on('swiperight', function(event) {
+        return swipe(event);
+      }).on('swipedown', function(event) {
+        return swipe(event);
+      }).on('swipeleft', function(event) {
+        return swipe(event);
+      }).on('swipeup', function(event) {
+        return swipe(event);
+      }).get('swipe').set({
+        direction: Hammer.DIRECTION_ALL
+      });
+    });
+    return swipe = function(event) {
+      var bigSquare, squareIndex;
+      bigSquare = $(event.target).parents('.outer-square')[0];
+      squareIndex = $('.outer-square').index(bigSquare);
+      if (event.type === 'swiperight') {
+        if (squareIndex === 0 || squareIndex === 1 || squareIndex === 2) {
+          rotate('cw');
+        }
+        if (squareIndex === 6 || squareIndex === 7 || squareIndex === 8) {
+          rotate('ccw');
+        }
+      }
+      if (event.type === 'swipedown') {
+        if (squareIndex === 2 || squareIndex === 5 || squareIndex === 8) {
+          rotate('cw');
+        }
+        if (squareIndex === 0 || squareIndex === 3 || squareIndex === 6) {
+          rotate('ccw');
+        }
+      }
+      if (event.type === 'swipeleft') {
+        if (squareIndex === 6 || squareIndex === 7 || squareIndex === 8) {
+          rotate('cw');
+        }
+        if (squareIndex === 0 || squareIndex === 1 || squareIndex === 2) {
+          rotate('ccw');
+        }
+      }
+      if (event.type === 'swipeup') {
+        if (squareIndex === 0 || squareIndex === 3 || squareIndex === 6) {
+          rotate('cw');
+        }
+        if (squareIndex === 2 || squareIndex === 5 || squareIndex === 8) {
+          return rotate('ccw');
+        }
+      }
     };
   });
 

@@ -60,7 +60,36 @@ LCM.controller 'BoardController', ($scope) ->
 
     requestAnimationFrame step
 
+  $ ->
+    Hammer($('.board')[0])
+        .on 'swiperight', (event) -> swipe(event)
+        .on 'swipedown', (event) -> swipe(event)
+        .on 'swipeleft', (event) -> swipe(event)
+        .on 'swipeup', (event) -> swipe(event)
+        .get('swipe').set({direction: Hammer.DIRECTION_ALL})
+  
+  swipe = (event) ->
+    bigSquare = $(event.target).parents('.outer-square')[0]
+    squareIndex = $('.outer-square').index(bigSquare)
+    if event.type is 'swiperight'
+      rotate 'cw' if squareIndex in [0, 1, 2]
+      rotate 'ccw' if squareIndex in [6, 7, 8]
+    if event.type is 'swipedown'
+      rotate 'cw' if squareIndex in [2, 5, 8]
+      rotate 'ccw' if squareIndex in [0, 3, 6]
+    if event.type is 'swipeleft'
+      rotate 'cw' if squareIndex in [6, 7, 8]
+      rotate 'ccw' if squareIndex in [0, 1, 2]
+    if event.type is 'swipeup'
+      rotate 'cw' if squareIndex in [0, 3, 6]
+      rotate 'ccw' if squareIndex in [2, 5, 8]
 
+# hammer = new Hammer(document.body)
+#       .on 'swipeleft', -> go 'right'
+#       .on 'swipeup', -> go 'down'
+#       .on 'swiperight', -> go 'left'
+#       .on 'swipedown', -> go 'up'
+#       .get('swipe').set({ direction: Hammer.DIRECTION_ALL })
 
 easeInOutQuad = (t, b, c, d) ->
   if (t /= d / 2) < 1
