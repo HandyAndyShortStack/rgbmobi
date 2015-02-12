@@ -3,7 +3,7 @@
   var easeInOutQuad;
 
   LCM.controller('BoardController', function($scope) {
-    var animationInProgress, applyCancellations, board, swipe;
+    var animationInProgress, applyCancellations, board, rotate, swipe;
     animationInProgress = false;
     board = $scope.board = LCM.board();
     $scope.o = {
@@ -31,7 +31,7 @@
       return _results;
     };
     applyCancellations();
-    window.rotate = $scope.rotote = function(direction) {
+    rotate = $scope.rotote = function(direction) {
       var change, duration, initialValue, squareDirections, startTime, step, updateSquarePositions;
       if (direction === 'cw') {
         squareDirections = {

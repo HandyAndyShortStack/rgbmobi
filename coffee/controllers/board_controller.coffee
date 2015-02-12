@@ -17,7 +17,7 @@ LCM.controller 'BoardController', ($scope) ->
       cancels = board.cancels()
   applyCancellations()
 
-  window.rotate = $scope.rotote = (direction) ->
+  rotate = $scope.rotote = (direction) ->
     if direction is 'cw'
       squareDirections = {right: [0, 1], down: [2, 5], left: [7, 8], up: [3, 6]}
     else if direction is 'ccw'
@@ -83,13 +83,6 @@ LCM.controller 'BoardController', ($scope) ->
     if event.type is 'swipeup'
       rotate 'cw' if squareIndex in [0, 3, 6]
       rotate 'ccw' if squareIndex in [2, 5, 8]
-
-# hammer = new Hammer(document.body)
-#       .on 'swipeleft', -> go 'right'
-#       .on 'swipeup', -> go 'down'
-#       .on 'swiperight', -> go 'left'
-#       .on 'swipedown', -> go 'up'
-#       .get('swipe').set({ direction: Hammer.DIRECTION_ALL })
 
 easeInOutQuad = (t, b, c, d) ->
   if (t /= d / 2) < 1
