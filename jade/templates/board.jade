@@ -6,11 +6,14 @@ div.row
         | 
 
 div.row
-  div.small-4.columns(ng-repeat="square in board.squares track by $index")
+  div.outer-square.small-4.columns(ng-repeat="square in board.squares track by $index")
     div.square
       div.square-content
-        | {{ square.product() }}
-        div.factorization
-          span(ng-repeat="(k, v) in square.primes") {{ k }}
-            sup {{ v }}
-            | 
+        div.inner-square
+          div.inner-square-content
+            div.wrapper
+              | {{ square.product() }}
+              div.factorization
+                span(ng-repeat="(k, v) in square.primes") {{ k }}
+                  sup {{ v }}
+                  | 

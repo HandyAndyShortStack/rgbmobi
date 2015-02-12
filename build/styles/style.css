@@ -1,14 +1,37 @@
 section#game .lcm {
   text-align: center;
 }
+section#game .outer-square {
+  padding: 15px;
+}
 section#game .square {
   width: 100%;
   padding-bottom: 100%;
+  background-color: #008000;
 }
 section#game .square .square-content {
   position: absolute;
   width: 100%;
   height: 100%;
-  text-align: center;
   padding-right: 30px;
+}
+section#game .square .square-content .inner-square {
+  position: relative;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  padding-bottom: 50%;
+  transform: translateY(-7.5px);
+  background-color: #da70d6;
+}
+section#game .square .square-content .inner-square .inner-square-content {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+section#game .square .square-content .inner-square .inner-square-content .wrapper {
+  width: 100%;
 }
