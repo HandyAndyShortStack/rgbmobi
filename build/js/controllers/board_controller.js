@@ -3,14 +3,9 @@
   var easeInOutQuad;
 
   LCM.controller('BoardController', function($scope) {
-    var animationInProgress, applyCancellations, board, rotate, swipe;
+    var animationInProgress, applyCancellations, board, rotate, shift, swipe;
     animationInProgress = false;
     board = $scope.board = LCM.board();
-    $scope.o = {
-      1: 1,
-      2: 2,
-      3: 3
-    };
     applyCancellations = $scope.applyCancellations = function() {
       var cancel, cancels, i, k, v, _i, _len, _ref, _ref1, _results;
       cancels = board.cancels();
@@ -105,6 +100,84 @@
       };
       return requestAnimationFrame(step);
     };
+    shift = $scope.shift = function(direction) {
+      var allSquares, change, duration, endSquareIndicies, endSquares, i, initialValue, startSquareIndicies, startSquares, startTime, step, translatePrefix, updateSquarePositions;
+      if (direction === 'right') {
+        endSquareIndicies = [2, 5, 8];
+        startSquareIndicies = [0, 3, 6];
+        translatePrefix = 'X(';
+      } else if (direction === 'down') {
+        endSquareIndicies = [6, 7, 8];
+        startSquareIndicies = [0, 1, 2];
+        translatePrefix = 'Y(';
+      } else if (direction === 'left') {
+        endSquareIndicies = [0, 3, 6];
+        startSquareIndicies = [2, 5, 8];
+        translatePrefix = 'X(-';
+      } else if (direction === 'up') {
+        endSquareIndicies = [0, 1, 2];
+        startSquareIndicies = [6, 7, 8];
+        translatePrefix = 'Y(-';
+      } else {
+        return;
+      }
+      allSquares = $('.outer-square');
+      endSquares = $((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = endSquareIndicies.length; _i < _len; _i++) {
+          i = endSquareIndicies[_i];
+          _results.push(allSquares[i]);
+        }
+        return _results;
+      })());
+      startSquares = $((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = startSquareIndicies.length; _i < _len; _i++) {
+          i = startSquareIndicies[_i];
+          _results.push(allSquares[i]);
+        }
+        return _results;
+      })());
+      startTime = null;
+      initialValue = 0;
+      change = 100;
+      duration = 300;
+      step = function(timeStamp) {
+        var progress, value;
+        animationInProgress = true;
+        if (!startTime) {
+          startTime = timeStamp;
+        }
+        progress = timeStamp - startTime;
+        value = easeInOutQuad(progress, initialValue, change, duration);
+        updateSquarePositions(value);
+        if (progress < duration) {
+          return requestAnimationFrame(step);
+        } else {
+          updateSquarePositions(100);
+          animationInProgress = false;
+          board.shift(direction);
+          applyCancellations();
+          $scope.$apply();
+          allSquares.css('transform', '');
+          endSquares.css('opacity', 1);
+          startSquares.css('opacity', 0);
+          return startSquares.animate({
+            opacity: 1
+          }, 200);
+        }
+      };
+      updateSquarePositions = function(value) {
+        return allSquares.css('transform', "translate" + translatePrefix + value + "%)");
+      };
+      return endSquares.animate({
+        opacity: 0
+      }, 200).promise().done(function() {
+        return requestAnimationFrame(step);
+      });
+    };
     $(function() {
       return Hammer($('.board')[0]).on('swiperight', function(event) {
         return swipe(event);
@@ -129,6 +202,9 @@
         if (squareIndex === 6 || squareIndex === 7 || squareIndex === 8) {
           rotate('ccw');
         }
+        if (squareIndex === 3 || squareIndex === 4 || squareIndex === 5) {
+          shift('right');
+        }
       }
       if (event.type === 'swipedown') {
         if (squareIndex === 2 || squareIndex === 5 || squareIndex === 8) {
@@ -136,6 +212,9 @@
         }
         if (squareIndex === 0 || squareIndex === 3 || squareIndex === 6) {
           rotate('ccw');
+        }
+        if (squareIndex === 1 || squareIndex === 4 || squareIndex === 7) {
+          shift('down');
         }
       }
       if (event.type === 'swipeleft') {
@@ -145,13 +224,19 @@
         if (squareIndex === 0 || squareIndex === 1 || squareIndex === 2) {
           rotate('ccw');
         }
+        if (squareIndex === 3 || squareIndex === 4 || squareIndex === 5) {
+          shift('left');
+        }
       }
       if (event.type === 'swipeup') {
         if (squareIndex === 0 || squareIndex === 3 || squareIndex === 6) {
           rotate('cw');
         }
         if (squareIndex === 2 || squareIndex === 5 || squareIndex === 8) {
-          return rotate('ccw');
+          rotate('ccw');
+        }
+        if (squareIndex === 1 || squareIndex === 4 || squareIndex === 7) {
+          return shift('up');
         }
       }
     };

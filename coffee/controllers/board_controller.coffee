@@ -1,11 +1,6 @@
 LCM.controller 'BoardController', ($scope) ->
   animationInProgress = false
   board = $scope.board = LCM.board()
-  
-  $scope.o =
-    1:1
-    2:2
-    3:3
 
   applyCancellations = $scope.applyCancellations = ->
     cancels = board.cancels()
@@ -60,6 +55,58 @@ LCM.controller 'BoardController', ($scope) ->
 
     requestAnimationFrame step
 
+  shift = $scope.shift = (direction) ->
+    if direction is 'right'
+      endSquareIndicies = [2, 5, 8]
+      startSquareIndicies = [0, 3, 6]
+      translatePrefix = 'X('
+    else if direction is 'down'
+      endSquareIndicies = [6, 7, 8]
+      startSquareIndicies = [0, 1, 2]
+      translatePrefix = 'Y('
+    else if direction is 'left'
+      endSquareIndicies = [0, 3, 6]
+      startSquareIndicies = [2, 5, 8]
+      translatePrefix = 'X(-'
+    else if direction is 'up'
+      endSquareIndicies = [0, 1, 2]
+      startSquareIndicies = [6, 7, 8]
+      translatePrefix = 'Y(-'
+    else
+      return
+
+    allSquares = $('.outer-square')
+    endSquares = $(allSquares[i] for i in endSquareIndicies)
+    startSquares = $(allSquares[i] for i in startSquareIndicies)
+    
+    startTime = null
+    initialValue = 0
+    change = 100
+    duration = 300
+    step = (timeStamp) ->
+      animationInProgress = true
+      startTime = timeStamp unless startTime
+      progress = timeStamp - startTime
+      value = easeInOutQuad progress, initialValue, change, duration
+      updateSquarePositions value
+      if progress < duration
+        requestAnimationFrame(step)
+      else
+        updateSquarePositions 100
+        animationInProgress = false
+        board.shift direction
+        applyCancellations()
+        $scope.$apply()
+        allSquares.css 'transform', ''
+        endSquares.css 'opacity', 1
+        startSquares.css 'opacity', 0
+        startSquares.animate {opacity: 1}, 200
+    updateSquarePositions = (value) ->
+      allSquares.css 'transform', "translate#{translatePrefix}#{value}%)"
+
+    endSquares.animate {opacity: 0}, 200
+        .promise().done -> requestAnimationFrame step
+
   $ ->
     Hammer($('.board')[0])
         .on 'swiperight', (event) -> swipe(event)
@@ -74,15 +121,19 @@ LCM.controller 'BoardController', ($scope) ->
     if event.type is 'swiperight'
       rotate 'cw' if squareIndex in [0, 1, 2]
       rotate 'ccw' if squareIndex in [6, 7, 8]
+      shift 'right' if squareIndex in [3, 4, 5]
     if event.type is 'swipedown'
       rotate 'cw' if squareIndex in [2, 5, 8]
       rotate 'ccw' if squareIndex in [0, 3, 6]
+      shift 'down' if squareIndex in [1, 4, 7]
     if event.type is 'swipeleft'
       rotate 'cw' if squareIndex in [6, 7, 8]
       rotate 'ccw' if squareIndex in [0, 1, 2]
+      shift 'left' if squareIndex in [3, 4, 5]
     if event.type is 'swipeup'
       rotate 'cw' if squareIndex in [0, 3, 6]
       rotate 'ccw' if squareIndex in [2, 5, 8]
+      shift 'up' if squareIndex in [1, 4, 7]
 
 easeInOutQuad = (t, b, c, d) ->
   if (t /= d / 2) < 1
