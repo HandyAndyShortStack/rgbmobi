@@ -2,6 +2,17 @@ LCM.board = ->
   colors = ['red', 'red', 'red', 'green', 'green', 'green', 'blue', 'blue', 'blue']
   colors = shuffleArray colors
 
+  rows = [
+    [0, 1, 2]
+    [3, 4, 5]
+    [6, 7, 8]
+  ]
+  columns = [
+    [0, 3, 6]
+    [1, 4, 7]
+    [2, 5, 8]
+  ]
+
   squares: (LCM.square(color) for color in colors)
 
   rotate: (direction) ->
@@ -25,6 +36,17 @@ LCM.board = ->
     else
       return
     @squares = (@squares[i] for i in newIndicies)
+
+  isSolved: ->
+    rowsSolved = true
+    columnsSolved = true
+    for row in rows
+      if rowsSolved
+        rowsSolved = @squares[row[0]].color is @squares[row[1]].color is @squares[row[2]].color
+    for column in columns
+      if columnsSolved
+        columnsSolved = @squares[column[0]].color is @squares[column[1]].color is @squares[column[2]].color
+    rowsSolved or columnsSolved
 
 shuffleArray = (array) ->
   i = array.length - 1

@@ -1,6 +1,8 @@
 LCM.controller 'BoardController', ($scope) ->
   animationInProgress = false
   board = $scope.board = LCM.board()
+  while board.isSolved()
+    board = LCM.board()
 
   rotate = $scope.rotote = (direction) ->
     return if animationInProgress
@@ -29,6 +31,7 @@ LCM.controller 'BoardController', ($scope) ->
         $scope.$apply()
         $('.outer-square').css 'transform', ''
         animationInProgress = false
+        checkSolved()
     updateSquarePositions = (value) ->
       for i in squareDirections.right
         squareEl = $('.outer-square')[i]
@@ -93,6 +96,7 @@ LCM.controller 'BoardController', ($scope) ->
         allSquares.css 'transform', ''
         allSquares.css 'z-index', 1
         animationInProgress = false
+        checkSolved()
     updateSquarePositions = (value) ->
       endSquares.css 'transform', "translate#{endTranslatePrefix}#{value * 2}%)"
       otherSquares.css 'transform', "translate#{translatePrefix}#{value}%)"
@@ -127,6 +131,9 @@ LCM.controller 'BoardController', ($scope) ->
       rotate 'cw' if squareIndex in [0, 3, 6]
       rotate 'ccw' if squareIndex in [2, 5, 8]
       shift 'up' if squareIndex in [1, 4, 7]
+
+  checkSolved = ->
+    alert 'The colors are aligned. You win!' if board.isSolved()
 
 easeInOutQuad = (t, b, c, d) ->
   if (t /= d / 2) < 1

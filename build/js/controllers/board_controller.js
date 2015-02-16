@@ -3,9 +3,12 @@
   var easeInOutQuad;
 
   LCM.controller('BoardController', function($scope) {
-    var animationInProgress, board, rotate, shift, swipe;
+    var animationInProgress, board, checkSolved, rotate, shift, swipe;
     animationInProgress = false;
     board = $scope.board = LCM.board();
+    while (board.isSolved()) {
+      board = LCM.board();
+    }
     rotate = $scope.rotote = function(direction) {
       var change, duration, initialValue, squareDirections, startTime, step, updateSquarePositions;
       if (animationInProgress) {
@@ -48,7 +51,8 @@
           board.rotate(direction);
           $scope.$apply();
           $('.outer-square').css('transform', '');
-          return animationInProgress = false;
+          animationInProgress = false;
+          return checkSolved();
         }
       };
       updateSquarePositions = function(value) {
@@ -150,7 +154,8 @@
           $scope.$apply();
           allSquares.css('transform', '');
           allSquares.css('z-index', 1);
-          return animationInProgress = false;
+          animationInProgress = false;
+          return checkSolved();
         }
       };
       updateSquarePositions = function(value) {
@@ -173,7 +178,7 @@
         direction: Hammer.DIRECTION_ALL
       });
     });
-    return swipe = function(event) {
+    swipe = function(event) {
       var bigSquare, squareIndex;
       bigSquare = $(event.target).parents('.outer-square')[0];
       squareIndex = $('.outer-square').index(bigSquare);
@@ -220,6 +225,11 @@
         if (squareIndex === 1 || squareIndex === 4 || squareIndex === 7) {
           return shift('up');
         }
+      }
+    };
+    return checkSolved = function() {
+      if (board.isSolved()) {
+        return alert('The colors are aligned. You win!');
       }
     };
   });
