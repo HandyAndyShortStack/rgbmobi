@@ -1,4 +1,4 @@
-LCM.directive 'board', ->
+RGB.directive 'board', ->
   restrict: 'E'
   templateUrl: '/board.html'
   replace: false

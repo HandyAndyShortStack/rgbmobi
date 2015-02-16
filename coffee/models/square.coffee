@@ -1,2 +1,2 @@
-LCM.square = (color) ->
+RGB.square = (color) ->
   color: color

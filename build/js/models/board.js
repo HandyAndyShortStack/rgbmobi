@@ -2,7 +2,7 @@
 (function() {
   var shuffleArray;
 
-  LCM.board = function() {
+  RGB.board = function() {
     var color, colors, columns, rows;
     colors = ['red', 'red', 'red', 'green', 'green', 'green', 'blue', 'blue', 'blue'];
     colors = shuffleArray(colors);
@@ -14,7 +14,7 @@
         _results = [];
         for (_i = 0, _len = colors.length; _i < _len; _i++) {
           color = colors[_i];
-          _results.push(LCM.square(color));
+          _results.push(RGB.square(color));
         }
         return _results;
       })(),

@@ -2,12 +2,12 @@
 (function() {
   var easeInOutQuad;
 
-  LCM.controller('BoardController', function($scope) {
+  RGB.controller('BoardController', function($scope) {
     var animationInProgress, board, checkSolved, rotate, shift, swipe;
     animationInProgress = false;
-    board = $scope.board = LCM.board();
+    board = $scope.board = RGB.board();
     while (board.isSolved()) {
-      board = LCM.board();
+      board = RGB.board();
     }
     rotate = $scope.rotote = function(direction) {
       var change, duration, initialValue, squareDirections, startTime, step, updateSquarePositions;

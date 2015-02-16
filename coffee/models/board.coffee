@@ -1,4 +1,4 @@
-LCM.board = ->
+RGB.board = ->
   colors = ['red', 'red', 'red', 'green', 'green', 'green', 'blue', 'blue', 'blue']
   colors = shuffleArray colors
 
@@ -13,7 +13,7 @@ LCM.board = ->
     [2, 5, 8]
   ]
 
-  squares: (LCM.square(color) for color in colors)
+  squares: (RGB.square(color) for color in colors)
 
   rotate: (direction) ->
     if direction is 'cw'

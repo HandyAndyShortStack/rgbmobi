@@ -1,8 +1,8 @@
-LCM.controller 'BoardController', ($scope) ->
+RGB.controller 'BoardController', ($scope) ->
   animationInProgress = false
-  board = $scope.board = LCM.board()
+  board = $scope.board = RGB.board()
   while board.isSolved()
-    board = LCM.board()
+    board = RGB.board()
 
   rotate = $scope.rotote = (direction) ->
     return if animationInProgress
