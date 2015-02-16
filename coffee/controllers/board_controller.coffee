@@ -49,26 +49,30 @@ LCM.controller 'BoardController', ($scope) ->
     return if animationInProgress
     if direction is 'right'
       endSquareIndicies = [2, 5, 8]
-      startSquareIndicies = [0, 3, 6]
+      otherSquareIndicies = [0, 1, 3, 4, 6, 7]
       translatePrefix = 'X('
+      endTranslatePrefix = 'X(-'
     else if direction is 'down'
       endSquareIndicies = [6, 7, 8]
-      startSquareIndicies = [0, 1, 2]
+      otherSquareIndicies = [0, 1, 2, 3, 4, 5]
       translatePrefix = 'Y('
+      endTranslatePrefix = 'Y(-'
     else if direction is 'left'
       endSquareIndicies = [0, 3, 6]
-      startSquareIndicies = [2, 5, 8]
+      otherSquareIndicies = [1, 2, 4, 5, 7, 8]
       translatePrefix = 'X(-'
+      endTranslatePrefix = 'X('
     else if direction is 'up'
       endSquareIndicies = [0, 1, 2]
-      startSquareIndicies = [6, 7, 8]
+      otherSquareIndicies = [3, 4, 5, 6, 7, 8]
       translatePrefix = 'Y(-'
+      endTranslatePrefix = 'Y('
     else
       return
 
     allSquares = $('.outer-square')
     endSquares = $(allSquares[i] for i in endSquareIndicies)
-    startSquares = $(allSquares[i] for i in startSquareIndicies)
+    otherSquares = $(allSquares[i] for i in otherSquareIndicies)
     
     startTime = null
     initialValue = 0
@@ -87,15 +91,14 @@ LCM.controller 'BoardController', ($scope) ->
         board.shift direction
         $scope.$apply()
         allSquares.css 'transform', ''
-        endSquares.css 'opacity', 1
-        startSquares.css 'opacity', 0
-        startSquares.animate {opacity: 1}, 200
+        allSquares.css 'z-index', 1
         animationInProgress = false
     updateSquarePositions = (value) ->
-      allSquares.css 'transform', "translate#{translatePrefix}#{value}%)"
-
-    endSquares.animate {opacity: 0}, 200
-        .promise().done -> requestAnimationFrame step
+      endSquares.css 'transform', "translate#{endTranslatePrefix}#{value * 2}%)"
+      otherSquares.css 'transform', "translate#{translatePrefix}#{value}%)"
+    
+    endSquares.css 'z-index', -1
+    requestAnimationFrame step
 
   $ ->
     Hammer($('.board')[0])

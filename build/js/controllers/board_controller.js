@@ -83,26 +83,30 @@
       return requestAnimationFrame(step);
     };
     shift = $scope.shift = function(direction) {
-      var allSquares, change, duration, endSquareIndicies, endSquares, i, initialValue, startSquareIndicies, startSquares, startTime, step, translatePrefix, updateSquarePositions;
+      var allSquares, change, duration, endSquareIndicies, endSquares, endTranslatePrefix, i, initialValue, otherSquareIndicies, otherSquares, startTime, step, translatePrefix, updateSquarePositions;
       if (animationInProgress) {
         return;
       }
       if (direction === 'right') {
         endSquareIndicies = [2, 5, 8];
-        startSquareIndicies = [0, 3, 6];
+        otherSquareIndicies = [0, 1, 3, 4, 6, 7];
         translatePrefix = 'X(';
+        endTranslatePrefix = 'X(-';
       } else if (direction === 'down') {
         endSquareIndicies = [6, 7, 8];
-        startSquareIndicies = [0, 1, 2];
+        otherSquareIndicies = [0, 1, 2, 3, 4, 5];
         translatePrefix = 'Y(';
+        endTranslatePrefix = 'Y(-';
       } else if (direction === 'left') {
         endSquareIndicies = [0, 3, 6];
-        startSquareIndicies = [2, 5, 8];
+        otherSquareIndicies = [1, 2, 4, 5, 7, 8];
         translatePrefix = 'X(-';
+        endTranslatePrefix = 'X(';
       } else if (direction === 'up') {
         endSquareIndicies = [0, 1, 2];
-        startSquareIndicies = [6, 7, 8];
+        otherSquareIndicies = [3, 4, 5, 6, 7, 8];
         translatePrefix = 'Y(-';
+        endTranslatePrefix = 'Y(';
       } else {
         return;
       }
@@ -116,11 +120,11 @@
         }
         return _results;
       })());
-      startSquares = $((function() {
+      otherSquares = $((function() {
         var _i, _len, _results;
         _results = [];
-        for (_i = 0, _len = startSquareIndicies.length; _i < _len; _i++) {
-          i = startSquareIndicies[_i];
+        for (_i = 0, _len = otherSquareIndicies.length; _i < _len; _i++) {
+          i = otherSquareIndicies[_i];
           _results.push(allSquares[i]);
         }
         return _results;
@@ -145,22 +149,16 @@
           board.shift(direction);
           $scope.$apply();
           allSquares.css('transform', '');
-          endSquares.css('opacity', 1);
-          startSquares.css('opacity', 0);
-          startSquares.animate({
-            opacity: 1
-          }, 200);
+          allSquares.css('z-index', 1);
           return animationInProgress = false;
         }
       };
       updateSquarePositions = function(value) {
-        return allSquares.css('transform', "translate" + translatePrefix + value + "%)");
+        endSquares.css('transform', "translate" + endTranslatePrefix + (value * 2) + "%)");
+        return otherSquares.css('transform', "translate" + translatePrefix + value + "%)");
       };
-      return endSquares.animate({
-        opacity: 0
-      }, 200).promise().done(function() {
-        return requestAnimationFrame(step);
-      });
+      endSquares.css('z-index', -1);
+      return requestAnimationFrame(step);
     };
     $(function() {
       return Hammer($('.board')[0]).on('swiperight', function(event) {
