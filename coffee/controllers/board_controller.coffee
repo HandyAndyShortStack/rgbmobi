@@ -77,7 +77,7 @@ LCM.controller 'BoardController', ($scope) ->
     startTime = null
     initialValue = 0
     change = 100
-    duration = 300
+    duration = 600
     step = (timeStamp) ->
       animationInProgress = true
       startTime = timeStamp unless startTime

@@ -132,7 +132,7 @@
       startTime = null;
       initialValue = 0;
       change = 100;
-      duration = 300;
+      duration = 600;
       step = function(timeStamp) {
         var progress, value;
         animationInProgress = true;
