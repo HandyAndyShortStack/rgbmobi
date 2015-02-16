@@ -3,31 +3,14 @@
   var easeInOutQuad;
 
   LCM.controller('BoardController', function($scope) {
-    var animationInProgress, applyCancellations, board, rotate, shift, swipe;
+    var animationInProgress, board, rotate, shift, swipe;
     animationInProgress = false;
     board = $scope.board = LCM.board();
-    applyCancellations = $scope.applyCancellations = function() {
-      var cancel, cancels, i, k, v, _i, _len, _ref, _ref1, _results;
-      cancels = board.cancels();
-      _results = [];
-      while (cancels.length > 0) {
-        cancel = cancels[0];
-        _ref = cancel.row;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          i = _ref[_i];
-          _ref1 = cancel.primes;
-          for (k in _ref1) {
-            v = _ref1[k];
-            board.squares[i].primes[k] -= v;
-          }
-        }
-        _results.push(cancels = board.cancels());
-      }
-      return _results;
-    };
-    applyCancellations();
     rotate = $scope.rotote = function(direction) {
       var change, duration, initialValue, squareDirections, startTime, step, updateSquarePositions;
+      if (animationInProgress) {
+        return;
+      }
       if (direction === 'cw') {
         squareDirections = {
           right: [0, 1],
@@ -62,11 +45,10 @@
           return requestAnimationFrame(step);
         } else {
           updateSquarePositions(100);
-          animationInProgress = false;
           board.rotate(direction);
-          applyCancellations();
           $scope.$apply();
-          return $('.outer-square').css('transform', '');
+          $('.outer-square').css('transform', '');
+          return animationInProgress = false;
         }
       };
       updateSquarePositions = function(value) {
@@ -102,6 +84,9 @@
     };
     shift = $scope.shift = function(direction) {
       var allSquares, change, duration, endSquareIndicies, endSquares, i, initialValue, startSquareIndicies, startSquares, startTime, step, translatePrefix, updateSquarePositions;
+      if (animationInProgress) {
+        return;
+      }
       if (direction === 'right') {
         endSquareIndicies = [2, 5, 8];
         startSquareIndicies = [0, 3, 6];
@@ -157,16 +142,15 @@
           return requestAnimationFrame(step);
         } else {
           updateSquarePositions(100);
-          animationInProgress = false;
           board.shift(direction);
-          applyCancellations();
           $scope.$apply();
           allSquares.css('transform', '');
           endSquares.css('opacity', 1);
           startSquares.css('opacity', 0);
-          return startSquares.animate({
+          startSquares.animate({
             opacity: 1
           }, 200);
+          return animationInProgress = false;
         }
       };
       updateSquarePositions = function(value) {

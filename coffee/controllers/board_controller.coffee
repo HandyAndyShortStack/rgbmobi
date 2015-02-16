@@ -2,17 +2,8 @@ LCM.controller 'BoardController', ($scope) ->
   animationInProgress = false
   board = $scope.board = LCM.board()
 
-  applyCancellations = $scope.applyCancellations = ->
-    cancels = board.cancels()
-    while cancels.length > 0
-      cancel = cancels[0]
-      for i in cancel.row
-        for k, v of cancel.primes
-          board.squares[i].primes[k] -= v
-      cancels = board.cancels()
-  applyCancellations()
-
   rotate = $scope.rotote = (direction) ->
+    return if animationInProgress
     if direction is 'cw'
       squareDirections = {right: [0, 1], down: [2, 5], left: [7, 8], up: [3, 6]}
     else if direction is 'ccw'
@@ -34,11 +25,10 @@ LCM.controller 'BoardController', ($scope) ->
         requestAnimationFrame(step)
       else
         updateSquarePositions 100
-        animationInProgress = false
         board.rotate direction
-        applyCancellations()
         $scope.$apply()
         $('.outer-square').css 'transform', ''
+        animationInProgress = false
     updateSquarePositions = (value) ->
       for i in squareDirections.right
         squareEl = $('.outer-square')[i]
@@ -56,6 +46,7 @@ LCM.controller 'BoardController', ($scope) ->
     requestAnimationFrame step
 
   shift = $scope.shift = (direction) ->
+    return if animationInProgress
     if direction is 'right'
       endSquareIndicies = [2, 5, 8]
       startSquareIndicies = [0, 3, 6]
@@ -93,14 +84,13 @@ LCM.controller 'BoardController', ($scope) ->
         requestAnimationFrame(step)
       else
         updateSquarePositions 100
-        animationInProgress = false
         board.shift direction
-        applyCancellations()
         $scope.$apply()
         allSquares.css 'transform', ''
         endSquares.css 'opacity', 1
         startSquares.css 'opacity', 0
         startSquares.animate {opacity: 1}, 200
+        animationInProgress = false
     updateSquarePositions = (value) ->
       allSquares.css 'transform', "translate#{translatePrefix}#{value}%)"
 
